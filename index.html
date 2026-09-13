@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Roblox | Gallery</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Codrops" />
+  <link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Asul:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Stack+Sans+Notch:wght@200..700&display=swap" rel="stylesheet">
+
+  <!-- Plain CSS files (converted from CSS Modules - class names kept as-is) -->
+  <link rel="stylesheet" href="./src/index.css">
+  <link rel="stylesheet" href="./src/frame/style.css">
+  <link rel="stylesheet" href="./src/loader/style.css">
+  <link rel="stylesheet" href="./src/infinite-canvas/style.css">
+  <link rel="stylesheet" href="./src/app/style.css">
+
+  <!--
+    No build tool (no Vite/Webpack) is used here. The browser loads React,
+    ReactDOM, three.js, and @react-three/fiber/drei directly as native ES
+    Modules from the esm.sh CDN. This import map makes "react", "three",
+    etc. resolvable as plain bare specifiers inside our own .js files,
+    exactly like they would be after a bundler step - except it happens
+    live in the browser. This means an internet connection is still
+    required (only for these library files), even though the app itself
+    runs from local files via XAMPP.
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.2.5",
+      "react/jsx-runtime": "https://esm.sh/react@19.2.5/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@19.2.5?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@19.2.5/client?external=react",
+      "three": "https://esm.sh/three@0.182.0",
+      "@react-three/fiber": "https://esm.sh/@react-three/fiber@9.4.2?external=react,react-dom,three",
+      "@react-three/drei": "https://esm.sh/@react-three/drei@10.7.7?external=react,react-dom,three,@react-three/fiber"
+    }
+  }
+  </script>
+
+  <script>
+    document.documentElement.className = 'js';
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="./src/index.js"></script>
+</body>
+
+</html>
