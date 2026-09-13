@@ -90,6 +90,10 @@
   object-fit: cover;
   user-select: none;
   -webkit-user-drag: none;
+  transition:
+    width 1s cubic-bezier(0.9, 0, 0.1, 1),
+    height 1s cubic-bezier(0.9, 0, 0.1, 1),
+    transform 1s cubic-bezier(0.9, 0, 0.1, 1);
 }
 
 .focusTitle {
@@ -122,8 +126,8 @@
     transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.65s ease;
   will-change: transform, opacity;
-  
   font-family: "Funnel Display", sans-serif;
+        vertical-align: middle;
 }
 
 .focusTitleVisible .focusWord {
@@ -147,6 +151,7 @@
   .focusWord {
     font-size: clamp(22px, 6vw, 34px);
     margin: 0 0.1em;
+      writing-mode: vertical-rl;
   }
 
   .focusImage {
