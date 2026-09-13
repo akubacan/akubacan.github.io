@@ -206,21 +206,43 @@ function FocusOverlay({ focus, closing, onClose }) {
     if (!focus)
         return null;
     const rect = focus.rect;
-    const targetWidth = Math.min(window.innerWidth * 0.72, window.innerWidth - 32);
-    const targetHeight = Math.min(window.innerHeight * 0.78, window.innerHeight - 32);
-    const aspect = rect.height / Math.max(rect.width, 1);
-    const fittedHeight = targetWidth * aspect;
-    const finalWidth = fittedHeight > targetHeight ? targetHeight / aspect : targetWidth;
-    const finalHeight = fittedHeight > targetHeight ? targetHeight : fittedHeight;
-    const targetLeft = (window.innerWidth - finalWidth) / 2;
-    const targetTop = (window.innerHeight - finalHeight) / 2;
+    const MARGIN = 32; // total px breathing room on the tightest axis
+    const viewportW = window.innerWidth;
+    const viewportH = window.innerHeight;
+    const isPortraitViewport = viewportH >= viewportW;
+    const isLandscapeImage = rect.width >= rect.height;
+    // On a portrait screen, a landscape photo barely uses any height if we
+    // just "contain" it upright (it stays letterboxed thin). Rotate it 90deg
+    // so its long edge runs along the phone's long edge and it actually fills
+    // the screen, like a full-screen photo viewer.
+    const shouldRotate = isPortraitViewport && isLandscapeImage;
+    const availW = viewportW - MARGIN;
+    const availH = viewportH - MARGIN;
+    // Dimensions to fit against the available box - swapped when rotating,
+    // since the rotated image's effective footprint has width/height flipped.
+    const fitW = shouldRotate ? rect.height : rect.width;
+    const fitH = shouldRotate ? rect.width : rect.height;
+    const scale = Math.min(availW / Math.max(fitW, 1), availH / Math.max(fitH, 1));
+    const finalWidth = fitW * scale;
+    const finalHeight = fitH * scale;
+    const targetLeft = (viewportW - finalWidth) / 2;
+    const targetTop = (viewportH - finalHeight) / 2;
     const expanded = opened && !closing;
     return (_jsxs("div", { className: `${styles.focusLayer} ${expanded ? styles.focusLayerOpen : ""} ${closing ? styles.focusLayerClosing : ""}`, onPointerDown: onClose, children: [_jsx("div", { className: styles.focusBackdrop }), _jsx("div", { className: styles.focusImage, style: {
                     left: expanded ? targetLeft : rect.left,
                     top: expanded ? targetTop : rect.top,
                     width: expanded ? finalWidth : rect.width,
                     height: expanded ? finalHeight : rect.height,
-                }, children: _jsx("img", { src: focus.media.url, alt: focus.media.title ?? "", draggable: false, onLoad: (event) => {
+                    display: shouldRotate ? "flex" : undefined,
+                    alignItems: shouldRotate ? "center" : undefined,
+                    justifyContent: shouldRotate ? "center" : undefined,
+                }, children: _jsx("img", { src: focus.media.url, alt: focus.media.title ?? "", draggable: false, style: expanded && shouldRotate ? {
+                        width: finalHeight,
+                        height: finalWidth,
+                        transform: "rotate(90deg)",
+                        transformOrigin: "center center",
+                        flexShrink: 0,
+                    } : undefined, onLoad: (event) => {
                         const img = event.currentTarget;
                         if (img.decode) {
                             img.decode().catch(() => undefined).finally(() => setImageReady(true));
