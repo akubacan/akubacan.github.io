@@ -1,0 +1,155 @@
+/** biome-ignore-all lint/complexity/noImportantStyles: who cares! */
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.canvas {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+
+.infoPanel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 12px;
+  font-size: 60%;
+  color: #000000;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.controlsPanel {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 10;
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 12px;
+  color: #000000;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.stats {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  left: auto !important;
+}
+
+/* Focused image / CodePen-style reveal */
+.focusLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.focusBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.focusLayerOpen .focusBackdrop,
+.focusLayerClosing .focusBackdrop {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.focusImage {
+  position: absolute;
+  overflow: hidden;
+  background: transparent;
+  z-index: 2;
+  transform-origin: center center;
+  transition:
+    left 1s cubic-bezier(0.9, 0, 0.1, 1),
+    top 1s cubic-bezier(0.9, 0, 0.1, 1),
+    width 1s cubic-bezier(0.9, 0, 0.1, 1),
+    height 1s cubic-bezier(0.9, 0, 0.1, 1);
+  will-change: left, top, width, height;
+}
+
+.focusImage img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.focusTitle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(90vw, 1100px);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  pointer-events: none;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.focusTitleClip {
+  overflow: hidden;
+  line-height: 1.05;
+}
+
+.focusWord {
+  display: inline-block;
+  margin: 0 0.16em;
+  font-size: clamp(28px, 3.2vw, 56px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.65s ease;
+  will-change: transform, opacity;
+  
+  font-family: "Funnel Display", sans-serif;
+}
+
+.focusTitleVisible .focusWord {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.focusLayerClosing .focusTitle .focusWord {
+  opacity: 0;
+  transform: translateY(-100%);
+  transition-delay: 0ms !important;
+  transition-duration: 0.55s;
+  transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@media (max-width: 700px) {
+  .focusTitle {
+    width: 92vw;
+  }
+
+  .focusWord {
+    font-size: clamp(22px, 6vw, 34px);
+    margin: 0 0.1em;
+  }
+
+  .focusImage {
+    transition-duration: 0.95s;
+  }
+}
