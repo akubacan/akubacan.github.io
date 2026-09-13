@@ -1,0 +1,43 @@
+import { jsx as _jsx } from "react/jsx-runtime";
+import * as React from "react";
+import styles from "./style.module.js";
+export function PageLoader({ progress }) {
+    const [show, setShow] = React.useState(true);
+    const [minTimeElapsed, setMinTimeElapsed] = React.useState(false);
+    const visualRef = React.useRef(0);
+    const [visualProgress, setVisualProgress] = React.useState(0);
+    React.useEffect(() => {
+        const timer = setTimeout(() => setMinTimeElapsed(true), 1500);
+        return () => clearTimeout(timer);
+    }, []);
+    React.useEffect(() => {
+        let raf;
+        const animate = () => {
+            const diff = progress - visualRef.current;
+            if (diff > 0.1) {
+                // Lerp toward target, faster when further behind
+                visualRef.current += diff * 0.08;
+                setVisualProgress(visualRef.current);
+                raf = requestAnimationFrame(animate);
+            }
+            else {
+                // Snap when close enough
+                visualRef.current = progress;
+                setVisualProgress(progress);
+            }
+        };
+        raf = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(raf);
+    }, [progress]);
+    React.useEffect(() => {
+        if (minTimeElapsed && progress === 100 && visualProgress >= 99.5) {
+            const t = setTimeout(() => setShow(false), 200);
+            return () => clearTimeout(t);
+        }
+    }, [minTimeElapsed, progress, visualProgress]);
+    if (!show) {
+        return null;
+    }
+    const isHidden = minTimeElapsed && progress === 100 && visualProgress >= 99.5;
+    return (_jsx("div", { className: `${styles.overlay} ${isHidden ? styles.hidden : styles.visible}`, children: _jsx("div", { className: styles.progressBarContainer, children: _jsx("div", { className: styles.progressBarFill, style: { transform: `scaleX(${visualProgress / 100})` } }) }) }));
+}
